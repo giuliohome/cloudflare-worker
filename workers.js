@@ -53,6 +53,37 @@ addEventListener("fetch", (event) => {
   async function handleRequest(request) {
     const { pathname } = new URL(request.url);
     
+    if (pathname == '/test') {
+        console.log('here');
+
+    const myurl = 'https://www.repubblica.it/economia/2021/10/26/news/governo_sindacati_draghi_lascia_la_riunione-323878439/amp/';
+
+
+    const resp = await fetch("https://www.repubblica.it/", {
+  "headers": {
+    "authority": 'www.repubblica.it',
+     'pragma': 'no-cache',
+     'sec-ch-ua': '"Chromium";v="94", "Google Chrome";v="94", ";Not A Brand";v="99"',
+     'sec-ch-ua-mobile': '?0',   
+     'sec-ch-ua-platform': "Windows", 
+     'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36',
+     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+     'sec-fetch-site': 'none',
+     'sec-fetch-mode': 'navigate',
+     'sec-fetch-user': '?1',
+     'sec-fetch-dest': 'document',
+     'accept-language': 'it-IT,it;q=0.9'
+    
+  },
+  "body": null,
+  "method": "GET"
+});
+    const body = await resp.text();
+
+return new Response(body);
+
+    }
+
     if (pathname.startsWith("/api")) {
       return new Response(JSON.stringify({ pathname }), {
         headers: { "Content-Type": "application/json" },
@@ -81,7 +112,29 @@ addEventListener("fetch", (event) => {
         "content-type": "text/html;charset="+mycharset
       }
     }
-    var ret = await fetch(pathname.replace("/https:/","https://"), respheaders);//split("/")[1]);
+    var ret = await fetch(pathname.replace("/https:/","https://"), 
+        {
+        "headers": {
+            "authority": 'www.repubblica.it',
+            'pragma': 'no-cache',
+            'sec-ch-ua': '"Chromium";v="94", "Google Chrome";v="94", ";Not A Brand";v="99"',
+            'sec-ch-ua-mobile': '?0',   
+            'sec-ch-ua-platform': "Windows", 
+            'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36',
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+            'sec-fetch-site': 'none',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-user': '?1',
+            'sec-fetch-dest': 'document',
+            'accept-language': 'it-IT,it;q=0.9'
+            
+        },
+        "body": null,
+        "method": "GET"
+        });
+    
+    //respheaders);
+    
     if (pathname.indexOf("repubblica.it/") == -1) {
       const rewriter = new HTMLRewriter()
       .on("*", new RemoveElement());
