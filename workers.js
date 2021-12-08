@@ -116,6 +116,7 @@ return new Response(body);
         {
         "headers": {
             "authority": 'www.repubblica.it',
+            "Referer": "https://m.google.com",
             'pragma': 'no-cache',
             'sec-ch-ua': '"Chromium";v="94", "Google Chrome";v="94", ";Not A Brand";v="99"',
             'sec-ch-ua-mobile': '?0',   
