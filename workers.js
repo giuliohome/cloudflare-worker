@@ -43,6 +43,19 @@ addEventListener("fetch", (event) => {
           }
       }
   }
+
+class CookieDeleter {
+  element(element) {
+			element.onEndTag((tag) => {
+					// Append the script tag to _before_ the closing head tag.
+					tag.before(
+            '<script defer> setTimeout(function() ' + 
+            '{ $(\'link[href*="cookie-wall"]\').remove(); }, 5000)' +
+            '</script>', {html: true});
+			})
+  }
+}
+
   
   /**
    * Many more examples available at:
@@ -142,6 +155,7 @@ return new Response(body);
       return rewriter.transform(ret);
     } else {
       const rewriter = new HTMLRewriter()
+      .on("body", new CookieDeleter())
       .on("div", new RepItElement());
       return rewriter.transform(ret);  
     }
