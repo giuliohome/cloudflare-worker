@@ -55,6 +55,20 @@ class CookieDeleter {
 			})
   }
 }
+class FixScroller {
+  element(element) {
+			element.onEndTag((tag) => {
+					// Append the script tag to _before_ the closing head tag.
+					tag.before(
+            '<script defer> setTimeout(function() ' + 
+            '{ ' + 
+            '$(\'div[class="privacy-cor-wall"]\').remove(); ' + 
+            '$("body").removeClass("noScroll"); ' +
+            ' }, 5000)' +
+            '</script>', {html: true});
+			})
+  }
+}
 
   
   /**
@@ -111,9 +125,11 @@ return new Response(body);
         : new Response("That's not a valid HTTP status code.");
     }
   
-    var mycharset = "UTF-8"; 
+    var mycharset = "UTF-8";
+    var isCorriere = 0; 
     if (pathname.indexOf("corriere.it/") > -1) {
         mycharset = "windows-1252";
+        isCorriere = 1;
     }
   const initheaders = {
       headers: {
@@ -150,7 +166,11 @@ return new Response(body);
     //respheaders);
     
     if (pathname.indexOf("repubblica.it/") == -1) {
-      const rewriter = new HTMLRewriter()
+      var htmlRewriter = new HTMLRewriter();
+      if  (isCorriere == 1) {
+        htmlRewriter = htmlRewriter.on("body", new FixScroller());
+      }
+      const rewriter = htmlRewriter
       .on("*", new RemoveElement());
       return rewriter.transform(ret);
     } else {
