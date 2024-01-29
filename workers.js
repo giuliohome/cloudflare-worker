@@ -69,7 +69,23 @@ class FixScroller {
 			})
   }
 }
+class AnchorHandler {
+  element(element) {
+    if (element.tagName === 'a') {
+      // Get the current href attribute value
+      let href = element.getAttribute('href');
 
+      // Check if it's an absolute path (starts with '/')
+      if (href && href.startsWith('/')) {
+        // Prepend your domain to the href
+        const transformedHref = 'https://corriere.it' + href;
+        
+        // Set the modified href attribute
+        element.setAttribute('href', transformedHref);
+      }
+    }
+  }
+}
   
   /**
    * Many more examples available at:
@@ -168,7 +184,7 @@ return new Response(body);
     if (pathname.indexOf("repubblica.it/") == -1) {
       var htmlRewriter = new HTMLRewriter();
       if  (isCorriere == 1) {
-        htmlRewriter = htmlRewriter.on("body", new FixScroller());
+        htmlRewriter = htmlRewriter.on("body", new FixScroller()).on('a', new AnchorHandler());
       }
       const rewriter = htmlRewriter
       .on("*", new RemoveElement());
